@@ -11,7 +11,12 @@ class LeafNode(HTMLNode):
             return self.value
         elif not self.props:
             return f'<{self.tag}>{self.value}</{self.tag}>'
-        return f'<{self.tag} {self.props}>{self.value}</{self.tag}>'
+        
+        htmlStart = f'<{self.tag}'
+        htmlStart += ''.join([f' {key}="{value}"' for key, value in self.props.items()])
+        htmlStart += '>'
+
+        return f'{htmlStart}{self.value}</{self.tag}>'
     
     def __repr__(self):
         return f"HTMLNode(tag={self.tag}, value={self.value}, props={self.props})"
