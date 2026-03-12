@@ -6,7 +6,7 @@ from split_nodes import split_nodes_delimiter
 class test_split_nodes_delimiter(unittest.TestCase):
 
     def test_basic_code_split(self):
-        node = TextNode("This is text with a `code block` word", TextType.CODE)
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
         result = split_nodes_delimiter([node], "`", TextType.CODE)
         self.assertEqual(result, [
             TextNode("This is text with a ", TextType.TEXT),
@@ -89,4 +89,19 @@ class test_split_nodes_delimiter(unittest.TestCase):
         self.assertEqual(result, [
             TextNode("this has ", TextType.TEXT),
             TextNode(" empty delimiters", TextType.TEXT),
+        ])
+
+    def test_multiple_delimiters(self):
+        node = TextNode("this has `code` and **bold** text, as well as __italic words__ in here", TextType.TEXT)
+        code_split = split_nodes_delimiter([node], '`', TextType.CODE)
+        bold_split = split_nodes_delimiter(code_split, "**", TextType.BOLD)
+        italics_split = split_nodes_delimiter(bold_split, "__", TextType.ITALIC)
+        self.assertEqual(italics_split, [
+            TextNode("this has ", TextType.TEXT),
+            TextNode("code", TextType.CODE),
+            TextNode(" and ", TextType.TEXT),
+            TextNode("bold", TextType.BOLD),
+            TextNode(" text, as well as ", TextType.TEXT),
+            TextNode("italic words", TextType.ITALIC),
+            TextNode(" in here", TextType.TEXT),
         ])
