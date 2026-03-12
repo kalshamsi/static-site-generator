@@ -1,5 +1,4 @@
-from textnode import *
-from htmlnode import *
+from textnode import TextNode, TextType
 
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: TextType):
     new_nodes = []
@@ -12,7 +11,7 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: TextType):
             new_strings = node.text.split(delimiter)
     
             if len(new_strings) % 2 == 0:
-                raise ValueError("Invalid syntax")
+                raise ValueError("Invalid markdown syntax: formatted section not closed")
         
             for i, sentence in enumerate(new_strings):
                 if sentence != "":
